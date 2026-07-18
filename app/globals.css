@@ -1,0 +1,16 @@
+@import "tailwindcss";
+
+@theme {
+  --color-ocean: #12363F;
+  --color-ocean-light: #1a4d5a;
+  --color-sun: #F2ED9D;
+  --color-lilac: #C2C2F2;
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+body {
+  background: #f9fafb;
+  color: #171717;
+  font-family: var(--font-geist-sans), system-ui, sans-serif;
+}
