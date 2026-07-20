@@ -32,6 +32,16 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: 'Missing fields' }, { status: 400 })
   }
 
+  if (typeof userMessage !== 'string' || userMessage.length > 10000) {
+    return NextResponse.json({ error: 'Message trop long' }, { status: 400 })
+  }
+
+  // Verify formation ownership (production only — RLS already enforces but explicit check is cleaner)
+  if (user) {
+    const { data: owned } = await supabase.from('formations').select('id').eq('id', formationId).eq('user_id', user.id).single()
+    if (!owned) return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
+  }
+
   // Save user message (production only)
   if (user && conversationId && conversationId !== 'demo') {
     await supabase.from('ai_messages').insert({

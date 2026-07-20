@@ -9,7 +9,8 @@ const pdfParse = require('pdf-parse') as (
 
 export async function POST(request: NextRequest) {
   const supabase = await createClient()
-  const { data: { user } } = await supabase.auth.getUser()
+  let user = null
+  try { const { data } = await supabase.auth.getUser(); user = data.user } catch {}
   if (!user) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
 
   const formData = await request.formData()

@@ -4,7 +4,8 @@ import { createClient } from '@/lib/supabase/server'
 // GET /api/ai/conversations?formationId=...&courseId=...&moduleId=...
 export async function GET(request: NextRequest) {
   const supabase = await createClient()
-  const { data: { user } } = await supabase.auth.getUser()
+  let user = null
+  try { const { data } = await supabase.auth.getUser(); user = data.user } catch {}
   if (!user) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
 
   const { searchParams } = new URL(request.url)
@@ -33,7 +34,8 @@ export async function GET(request: NextRequest) {
 // POST /api/ai/conversations — create conversation
 export async function POST(request: NextRequest) {
   const supabase = await createClient()
-  const { data: { user } } = await supabase.auth.getUser()
+  let user = null
+  try { const { data } = await supabase.auth.getUser(); user = data.user } catch {}
   if (!user) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
 
   const { formationId, courseId, moduleId, title } = await request.json()
@@ -57,7 +59,8 @@ export async function POST(request: NextRequest) {
 // DELETE /api/ai/conversations?id=...
 export async function DELETE(request: NextRequest) {
   const supabase = await createClient()
-  const { data: { user } } = await supabase.auth.getUser()
+  let user = null
+  try { const { data } = await supabase.auth.getUser(); user = data.user } catch {}
   if (!user) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
 
   const { searchParams } = new URL(request.url)
